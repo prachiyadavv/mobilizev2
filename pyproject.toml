@@ -1,0 +1,11 @@
+[project]
+name = "mobilize"
+version = "2.0.0"
+description = "A Q&A discussion board for university students (rebuild of a 2021 team project)"
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]

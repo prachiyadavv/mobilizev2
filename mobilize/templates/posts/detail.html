@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}{{ post.subject }}{% endblock %}
+{% block content %}
+<p><a class="back" href="{{ url_for('posts.feed') }}">← Back to feed</a></p>
+
+<article class="card post-detail">
+  <div class="vote-col">
+    <form method="post" action="{{ url_for('posts.vote', post_id=post.id) }}">
+      {{ action.hidden_tag() }}
+      {% if post.voted_by(g.user) %}
+        <button class="vote-btn voted" type="submit" title="Undo your upvote">▲</button>
+      {% else %}
+        <button class="vote-btn" type="submit" title="Upvote this question">▲</button>
+      {% endif %}
+    </form>
+    <span class="vote-n">{{ post.rating }}</span>
+    {% if post.voted_by(g.user) %}<span class="vote-note">Undo</span>{% endif %}
+  </div>
+
+  <div class="post-main">
+    <h1>{{ post.subject }}</h1>
+    <div class="meta">
+      {% if post.course %}<span class="chip">{{ post.course }}</span>{% endif %}
+      Asked by <a href="{{ url_for('account.profile', user_id=post.author.id) }}">{{ post.author.full_name }}</a>
+      · {{ post.date.strftime('%b %d, %Y') }}
+    </div>
+    <div class="post-text">{{ post.text }}</div>
+    {% if post.image_file %}
+      <img class="post-image" src="{{ url_for('posts.uploaded_file', filename=post.image_file) }}" alt="Image attached to the question">
+    {% endif %}
+
+    {% if g.user.id == post.user_id %}
+      <div class="owner-actions">
+        <a class="btn btn-sm" href="{{ url_for('posts.edit_post', post_id=post.id) }}">Edit</a>
+        <form method="post" action="{{ url_for('posts.delete_post', post_id=post.id) }}"
+              onsubmit="return confirm('Delete this question and all its answers?');">
+          {{ action.hidden_tag() }}
+          <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+</article>
+
+<section id="comments">
+  <h2 class="section-title">{{ post.comments|length }} {{ 'answer' if post.comments|length == 1 else 'answers' }}</h2>
+  {% for c in post.comments %}
+    <div class="comment">
+      <div class="comment-text">{{ c.content }}</div>
+      <div class="meta">
+        <a href="{{ url_for('account.profile', user_id=c.author.id) }}">{{ c.author.full_name }}</a>
+        · {{ c.date_posted.strftime('%b %d, %Y') }}
+      </div>
+    </div>
+  {% endfor %}
+
+  <form class="card comment-form" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.content, rows=3, placeholder="Share what you know…") }}
+    <button class="btn btn-primary" type="submit">Post answer</button>
+  </form>
+</section>
+{% endblock %}

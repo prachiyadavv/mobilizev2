@@ -1,0 +1,30 @@
+{% macro field(f, hint=None) %}
+  <div class="field{% if f.errors %} has-error{% endif %}">
+    {{ f.label }}
+    {{ f(**kwargs) }}
+    {% if hint and not f.errors %}<p class="hint">{{ hint }}</p>{% endif %}
+    {% for e in f.errors %}<p class="error">{{ e }}</p>{% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro post_row(post) %}
+  <li class="post-row">
+    <div class="score" title="Upvotes">
+      <span class="score-n">{{ post.rating }}</span>
+      <span class="score-l">{{ 'vote' if post.rating == 1 else 'votes' }}</span>
+    </div>
+    <div class="post-body">
+      <a class="post-subject" href="{{ url_for('posts.detail', post_id=post.id) }}">{{ post.subject }}</a>
+      <p class="post-excerpt">{{ post.text|truncate(140) }}</p>
+      <div class="meta">
+        {% if post.course %}<span class="chip">{{ post.course }}</span>{% endif %}
+        <span>{{ post.author.full_name }}</span>
+        <span>·</span>
+        <span>{{ post.date.strftime('%b %d, %Y') }}</span>
+        <span>·</span>
+        <span>{{ post.comments|length }} {{ 'answer' if post.comments|length == 1 else 'answers' }}</span>
+        {% if post.image_file %}<span>· 📎 image</span>{% endif %}
+      </div>
+    </div>
+  </li>
+{% endmacro %}

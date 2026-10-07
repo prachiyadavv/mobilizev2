@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}{{ 'Edit question' if post else 'Ask a question' }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>{{ 'Edit question' if post else 'Ask a question' }}</h1>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.subject, placeholder="e.g. Is the ITSC 3155 final cumulative?") }}
+    {{ field(form.course, placeholder="e.g. ITSC 3155", hint="Tag a course so classmates can filter for it.") }}
+    {{ field(form.text, rows=7, placeholder="Add details so people can give a useful answer.") }}
+    {% if post and post.image_file %}
+      <div class="current-image">
+        <img src="{{ url_for('posts.uploaded_file', filename=post.image_file) }}" alt="Current image">
+        <label class="check">{{ form.remove_image() }} {{ form.remove_image.label.text }}</label>
+      </div>
+    {% endif %}
+    {{ field(form.image, accept="image/*", hint="JPG, PNG, GIF or WebP, up to 4 MB.") }}
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">{{ 'Update question' if post else 'Post question' }}</button>
+      <a class="btn" href="{{ url_for('posts.detail', post_id=post.id) if post else url_for('posts.feed') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Create your account</h1>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="row-2">
+      {{ field(form.first_name, autocomplete="given-name") }}
+      {{ field(form.last_name, autocomplete="family-name") }}
+    </div>
+    {{ field(form.email, autocomplete="email") }}
+    {{ field(form.password, hint="At least 8 characters, with a letter, a number and a special character.", autocomplete="new-password") }}
+    {{ field(form.confirm, autocomplete="new-password") }}
+    <button class="btn btn-primary btn-block" type="submit">Register</button>
+  </form>
+  <p class="muted small center">Have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+</div>
+{% endblock %}

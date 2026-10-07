@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Edit profile{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Edit profile</h1>
+  <p class="muted small">Everything here is optional and visible to other students.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.quote) }}
+    {{ field(form.courses, placeholder="e.g. ITSC 3155, MATH 2164") }}
+    {{ field(form.hobbies) }}
+    {{ field(form.color, placeholder="e.g. teal") }}
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Update profile</button>
+      <a class="btn" href="{{ url_for('account.profile', user_id=g.user.id) }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ person.full_name }}{% endblock %}
+{% block content %}
+<div class="card profile">
+  <div class="avatar" {% if person.color %}style="--avatar: {{ person.color }}"{% endif %}>
+    {{ person.first_name[0] }}{{ person.last_name[0] }}
+  </div>
+  <div class="profile-main">
+    <h1>{{ person.full_name }}</h1>
+    <p class="muted small">Member since {{ person.registered_on.strftime('%B %Y') }}
+      · {{ person.posts|length }} {{ 'question' if person.posts|length == 1 else 'questions' }}
+      · {{ person.comments|length }} {{ 'answer' if person.comments|length == 1 else 'answers' }}</p>
+    {% if person.quote %}<blockquote>“{{ person.quote }}”</blockquote>{% endif %}
+    <dl class="facts">
+      {% if person.courses %}<dt>Courses</dt><dd>{{ person.courses }}</dd>{% endif %}
+      {% if person.hobbies %}<dt>Hobbies</dt><dd>{{ person.hobbies }}</dd>{% endif %}
+      {% if person.color %}<dt>Favorite color</dt><dd>{{ person.color }}</dd>{% endif %}
+    </dl>
+    {% if not (person.quote or person.courses or person.hobbies or person.color) %}
+      <p class="muted">No profile details yet.</p>
+    {% endif %}
+    {% if g.user.id == person.id %}
+      <a class="btn btn-sm" href="{{ url_for('account.edit_profile') }}">Edit profile</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

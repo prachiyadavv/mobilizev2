@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import post_row %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Ask the questions everyone in your class is wondering about.</h1>
+  <p class="lede">
+    Mobilize is a discussion board for university students. Post a question about a course
+    or campus, answer each other, and upvote what helps &mdash; the most useful questions
+    rise to the top of the feed.
+  </p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Create an account</a>
+    <a class="btn" href="{{ url_for('auth.login') }}">Log in</a>
+  </div>
+</section>
+
+{% if top %}
+<section>
+  <h2 class="section-title">Most useful right now</h2>
+  <ul class="post-list">
+    {% for post in top %}{{ post_row(post) }}{% endfor %}
+  </ul>
+  <p class="muted small">Log in to read answers and join the discussion.</p>
+</section>
+{% endif %}
+{% endblock %}
